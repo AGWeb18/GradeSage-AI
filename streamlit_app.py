@@ -5,13 +5,19 @@ import numpy as np
 import os
 import re
 import time
+import json
+import requests 
+from st_paywall import add_auth
 
 
 st.set_page_config(page_title="GradeSage AI", page_icon="🎓", layout="wide")
+# Main app flow
+st.title("Welcome to GradeSage AI")
+st.write("If you haven't already, login and subscribe to start using Grade Sage AI")
+# st.write("Great to see you! Ready to revolutionize your grading process? Subscribe to get started.")    
+add_auth(required=True)
 
-st.title("GradeSage AI")
-st.write("Upload your CSV file to grade assignments using AI.")
-
+st.write("Welcome! Upload your CSV file to grade assignments using AI.")
 # File uploader
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
@@ -76,7 +82,9 @@ if uploaded_file is not None:
                     model="claude-3-5-sonnet-20240620",
                     max_tokens=618,
                     temperature=0,
-                    system="""You are a Teaching Assistant at a university level, responsible for evaluating student responses across various courses. Your task is to read the provided question and student answer, then assess the response quality on a scale of 0 to 5.
+                    system="""You are a Teaching Assistant at a university level, responsible for evaluating student responses across various courses. 
+                    
+                    Your task is to read the provided question and student answer, then assess the response quality on a scale of 0 to 5.
 
                     Scoring guidelines:
                     0 - No answer provided or completely blank response
@@ -222,5 +230,16 @@ if uploaded_file is not None:
             mime="text/csv",
         )
 
-# Display API key status
-st.sidebar.write("API Key Status:", "Set" if os.getenv("ANTHROPIC_API_KEY") else "Not Set")
+        # Add this new section to identify and display the worst-performing question
+        st.subheader("Worst-Performing Question")
+
+        # Group by Question and calculate the average AI-Score
+        question_scores = responses_df.groupby('Question')['AI-Score'].mean().reset_index()
+
+        # Identify the worst-performing question
+        worst_question = question_scores.loc[question_scores['AI-Score'].idxmin()]
+
+        # Display the worst-performing question in a sentence
+        st.write(f"The question students struggled with the most is:")
+        st.markdown(f"**{worst_question['Question']}**")
+        st.write(f"Average score: {worst_question['AI-Score']:.2f} out of 5")
