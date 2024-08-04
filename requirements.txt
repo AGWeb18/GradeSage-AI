@@ -101,6 +101,7 @@ st-paywall==0.1.8
 stack-data==0.6.3
 streamlit==1.37.0
 streamlit-authenticator==0.3.3
+streamlit-lottie==0.0.5
 streamlit-oauth==0.1.13
 stripe==10.6.0
 tenacity==8.5.0
