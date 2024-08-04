@@ -8,12 +8,230 @@ import time
 import json
 import requests 
 from st_paywall import add_auth
+from streamlit_lottie import st_lottie
 
 
+
+
+# Page config
 st.set_page_config(page_title="GradeSage AI", page_icon="🎓", layout="wide")
-# Main app flow
-st.title("Welcome to GradeSage AI")
-st.write("If you haven't already, login and subscribe to start using Grade Sage AI")
+
+# Sidebar enhancements
+st.sidebar.title("GradeSage AI")
+
+# User authentication status
+user_info = add_auth(required=False)
+
+if user_info:
+    st.sidebar.success(f"Welcome, {user_info['given_name']}!")
+    st.sidebar.button("Logout", key="logout")
+else:
+    st.sidebar.info("Please log in to access all features.")
+
+
+# Version info
+st.sidebar.write("---")
+st.sidebar.write("Version 1.0.0")
+
+# Custom CSS with font color fixes and new carousel styles
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f0f2f6;
+    }
+    .title {
+        font-size: 50px !important;
+        color: #1E1E1E !important;
+        animation: fadeIn 1.5s;
+    }
+    .subtitle {
+        font-size: 25px !important;
+        color: #4F4F4F !important;
+        animation: slideIn 1.5s;
+    }
+    p, .stButton > button {
+        color: #1E1E1E !important;
+    }
+    .stTextArea > div > div > textarea {
+        color: #1E1E1E !important;
+    }
+    .example-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .example-title {
+        font-size: 20px !important;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    @keyframes fadeIn {
+        0% {opacity: 0;}
+        100% {opacity: 1;}
+    }
+    @keyframes slideIn {
+        0% {transform: translateY(50%); opacity: 0;}
+        100% {transform: translateY(0); opacity: 1;}
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Function to load Lottie animation
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+# Load Lottie animation
+lottie_book = load_lottieurl('https://assets5.lottiefiles.com/packages/lf20_1a8dx7zj.json')
+
+# Main content
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    st.markdown('<p class="title">GradeSage AI</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Smart grading for all platforms.</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Desire2Learn and beyond.</p>', unsafe_allow_html=True)
+
+    st.write("##")
+    st.markdown('<p class="subtitle">📝 Grade short answers/essays in minutes</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">🌐 Compatible with any Learning Management System</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">🤖 Powered by advanced AI technology</p>', unsafe_allow_html=True)
+
+with col2:
+    st_lottie(lottie_book, height=300, key="book")
+
+# Example carousel section
+st.write("---")
+st.write("## GradeSage AI in Action")
+
+examples = [
+    {
+        "title": "Example 1: Short Answer Grading",
+        "question": "Explain the concept of supply and demand in economics.",
+        "answer": "Supply and demand are fundamental economic principles that determine the price and quantity of goods in a market. Supply represents the amount of a product producers are willing to sell at various prices, while demand represents the amount consumers are willing to buy. The point where supply and demand intersect determines the market equilibrium price and quantity.",
+        "score": 4,
+        "feedback": "Excellent explanation covering the key aspects of supply and demand. Consider adding an example to illustrate the concept further."
+    },
+    {
+        "title": "Example 2: Essay Evaluation",
+        "question": "Discuss the impact of social media on modern communication.",
+        "answer": "Social media has revolutionized modern communication by providing instant connectivity and global reach. Platforms like Facebook, Twitter, and Instagram have changed how we share information, connect with others, and consume content. While it has improved access to information and facilitated new forms of expression, concerns about privacy, misinformation, and mental health impacts have also arisen.",
+        "score": 3,
+        "feedback": "Good overview of social media's impact. To improve, provide specific examples and discuss both positive and negative effects in more detail."
+    },
+    {
+        "title": "Example 3: Technical Question Assessment",
+        "question": "Describe the process of photosynthesis in plants.",
+        "answer": "Photosynthesis is the process by which plants use sunlight, water, and carbon dioxide to produce oxygen and energy in the form of sugar. It occurs in the chloroplasts, specifically using the green pigment chlorophyll. The process has two stages: light-dependent reactions and light-independent reactions (Calvin cycle).",
+        "score": 4,
+        "feedback": "Very good explanation of photosynthesis. To achieve a perfect score, include more details about the light-dependent and light-independent reactions."
+    }
+]
+
+for i, example in enumerate(examples):
+    with st.expander(f"{example['title']}"):
+        st.markdown(f"<div class='example-card'>", unsafe_allow_html=True)
+        st.markdown(f"<p class='example-title'>Question:</p>", unsafe_allow_html=True)
+        st.write(example['question'])
+        st.markdown(f"<p class='example-title'>Student Answer:</p>", unsafe_allow_html=True)
+        st.write(example['answer'])
+        st.markdown(f"<p class='example-title'>AI Grading:</p>", unsafe_allow_html=True)
+        st.write(f"Score: {example['score']}/5")
+        st.write(f"Feedback: {example['feedback']}")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+# New Pricing Section
+st.write("---")
+st.write("## Pricing")
+
+st.markdown("""
+<style>
+.pricing-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    margin-top: 30px;
+}
+.pricing-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease;
+    
+}
+.pricing-card:hover {
+    transform: translateY(-5px);
+}
+.pricing-title {
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #1E1E1E;
+}
+.pricing-price {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #4F4F4F;
+}
+.pricing-details {
+    margin-bottom: 20px;
+    color: #4F4F4F;
+}
+.pricing-cta {
+    background-color: #F63366;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.pricing-cta:hover {
+    background-color: #D81B60;
+}
+</style>
+
+<div class="pricing-container">
+    <div class="pricing-card">
+        <div>
+            <h3 class="pricing-title">Monthly Plan</h3>
+            <p class="pricing-price">$15/month</p>
+            <p class="pricing-details">Perfect for short-term projects or to try out our service.</p>
+        </div>
+        <a href="#" class="pricing-cta">Get Started</a>
+    </div>
+    <div class="pricing-card">
+        <div>
+            <h3 class="pricing-title">Annual Plan</h3>
+            <p class="pricing-price">$150/year</p>
+            <p class="pricing-details">Save $30 with our annual plan. Best value for regular use.</p>
+        </div>
+        <a href="#" class="pricing-cta">Get Started</a>
+    </div>
+</div>
+
+<p style="text-align: center; margin-top: 20px; font-weight: bold; color: #4F4F4F;">
+    Cancel Anytime
+</p>
+""", unsafe_allow_html=True)
+
+
+# Footer
+st.write("---")
+st.write("© 2024 GradeSage AI. All rights reserved.")
 # st.write("Great to see you! Ready to revolutionize your grading process? Subscribe to get started.")    
 add_auth(required=True)
 
@@ -243,3 +461,5 @@ if uploaded_file is not None:
         st.write(f"The question students struggled with the most is:")
         st.markdown(f"**{worst_question['Question']}**")
         st.write(f"Average score: {worst_question['AI-Score']:.2f} out of 5")
+
+#
