@@ -450,8 +450,7 @@ if 'email' in st.session_state and st.session_state.email and 'user_subscribed' 
                     details_text.text(f"User {i+1}/{total_users}, WR Question {j+1}/{user_wr_questions}\n"
                                     f"Total progress: {processed_questions}/{total_wr_questions} WR questions\n"
                                     f"Time for last question: {question_time:.2f}s\n"
-                                    f"Estimated time re
-                                      ing: {(total_wr_questions - processed_questions) * question_time / 60:.2f} minutes")
+                                    f"Estimated time remaining: {(total_wr_questions - processed_questions) * question_time / 60:.2f} minutes")
 
                 # Update progress bar
                 progress_bar.progress((i + 1) / total_users)
