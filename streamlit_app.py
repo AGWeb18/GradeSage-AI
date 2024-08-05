@@ -9,6 +9,10 @@ import json
 import requests 
 from st_paywall import add_auth
 from streamlit_lottie import st_lottie
+from PIL import Image
+
+# Grade Sage Logo
+logo = Image.open("GradeSageLogo.png")  # Adjust the path if necessary
 
 # Define the subscription URLs
 monthly_sub_url = "https://buy.stripe.com/28ocO9fMubQB0EgbII"
@@ -17,6 +21,7 @@ annual_sub_url = "https://buy.stripe.com/fZe6pLcAiaMx5YAbIJ"
 # Page config
 st.set_page_config(page_title="GradeSage AI", page_icon="🎓", layout="wide")
 
+# Custom CSS with improved styling and consistent dark blue theme
 # Custom CSS with improved styling and consistent dark blue theme
 st.markdown("""
     <style>
@@ -62,33 +67,7 @@ st.markdown("""
         gap: 1rem;
         margin-top: 2rem;
     }
-    /* Unified button styles */
-    .stButton > button,
-    .stTextInput > div > div > input,
-    .stSelectbox > div > div > select,
-    .cta-button,
-    .subscribe-button,
-    div[data-testid="stFormSubmitButton"] > button,
-    .sidebar .streamlit-button {
-        background-color: #00008B !important;  /* Dark Blue */
-        color: white !important;
-        font-weight: bold !important;
-        padding: 0.5rem 1rem !important;
-        border-radius: 5px !important;
-        border: none !important;
-        transition: background-color 0.3s ease !important;
-        text-decoration: none;
-    }
-    /* Unified hover styles */
-    .stButton > button:hover,
-    .stTextInput > div > div > input:hover,
-    .stSelectbox > div > div > select:hover,
-    .cta-button:hover,
-    .subscribe-button:hover,
-    div[data-testid="stFormSubmitButton"] > button:hover,
-    .sidebar .streamlit-button:hover {
-        background-color: #0000CD !important;  /* Medium Blue */
-    }
+
     .footer {
         text-align: center;
         margin-top: 3rem;
@@ -119,34 +98,16 @@ def load_lottieurl(url: str):
 # Load Lottie animation
 lottie_book = load_lottieurl('https://assets5.lottiefiles.com/packages/lf20_1a8dx7zj.json')
 
-# Custom CSS with more specific selectors and !important flags
-st.markdown("""
-    <style>
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a,
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a div {
-        background-color: #00008B !important;
-        color: white !important;
-        font-weight: bold !important;
-        padding: 0.5rem 1rem !important;
-        border-radius: 5px !important;
-        border: none !important;
-        text-align: center !important;
-        text-decoration: none !important;
-        display: inline-block !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        transition: background-color 0.3s ease !important;
-    }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover,
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover div {
-        background-color: #0000CD !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # In your sidebar
 with st.sidebar:
-    st.title("GradeSage AI")
+    st.sidebar.image(logo, width=150, caption="Secure Grading. Superior Insights.")  # Adjust the width as needed
+
+
+    st.markdown("""
+        <div class="sidebar-header">
+            <h1>GradeSage AI</h1>
+        </div>
+    """, unsafe_allow_html=True)
     
     # Use add_auth for optional authentication
     add_auth(
@@ -167,15 +128,16 @@ with st.sidebar:
             st.warning("Not subscribed")
     else:
         st.info("Please log in to access all features")
-
 # Header
 st.markdown('<h1 class="title">GradeSage AI</h1>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Smart grading for all platforms. Desire2Learn and beyond.</p>', unsafe_allow_html=True)
+
+
 
 # Main content area
 col1, col2 = st.columns([3, 2])
 
 with col1:
+    st.markdown('<p class="subtitle">Smart grading for all platforms. </p><br><p class="subtitle">Desire2Learn and beyond.</p>', unsafe_allow_html=True)
     st.markdown('<h2 class="section-title">Features</h2>', unsafe_allow_html=True)
     
     st.markdown("""
@@ -193,6 +155,53 @@ with col1:
 with col2:
     st_lottie(lottie_book, height=300, key="book")
 
+    # CTA Button (updated to use the new color scheme)
+st.markdown("""
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="#" class="cta-button">Start Now</a>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# Example carousel section
+st.write("---")
+st.write("## GradeSage AI in Action")
+
+examples = [
+    {
+        "title": "Example 1: Short Answer Grading",
+        "question": "Explain the concept of supply and demand in economics.",
+        "answer": "Supply and demand are fundamental economic principles that determine the price and quantity of goods in a market. Supply represents the amount of a product producers are willing to sell at various prices, while demand represents the amount consumers are willing to buy. The point where supply and demand intersect determines the market equilibrium price and quantity.",
+        "score": 4,
+        "feedback": "Excellent explanation covering the key aspects of supply and demand. Consider adding an example to illustrate the concept further."
+    },
+    {
+        "title": "Example 2: Essay Evaluation",
+        "question": "Discuss the impact of social media on modern communication.",
+        "answer": "Social media has revolutionized modern communication by providing instant connectivity and global reach. Platforms like Facebook, Twitter, and Instagram have changed how we share information, connect with others, and consume content. While it has improved access to information and facilitated new forms of expression, concerns about privacy, misinformation, and mental health impacts have also arisen.",
+        "score": 3,
+        "feedback": "Good overview of social media's impact. To improve, provide specific examples and discuss both positive and negative effects in more detail."
+    },
+    {
+        "title": "Example 3: Technical Question Assessment",
+        "question": "Describe the process of photosynthesis in plants.",
+        "answer": "Photosynthesis is the process by which plants use sunlight, water, and carbon dioxide to produce oxygen and energy in the form of sugar. It occurs in the chloroplasts, specifically using the green pigment chlorophyll. The process has two stages: light-dependent reactions and light-independent reactions (Calvin cycle).",
+        "score": 4,
+        "feedback": "Very good explanation of photosynthesis. To achieve a perfect score, include more details about the light-dependent and light-independent reactions."
+    }
+]
+
+for i, example in enumerate(examples):
+    with st.expander(f"{example['title']}"):
+        st.markdown(f"<div class='example-card'>", unsafe_allow_html=True)
+        st.markdown(f"<p class='example-title'>Question:</p>", unsafe_allow_html=True)
+        st.write(example['question'])
+        st.markdown(f"<p class='example-title'>Student Answer:</p>", unsafe_allow_html=True)
+        st.write(example['answer'])
+        st.markdown(f"<p class='example-title'>AI Grading:</p>", unsafe_allow_html=True)
+        st.write(f"Score: {example['score']}/5")
+        st.write(f"Feedback: {example['feedback']}")
+        st.markdown("</div>", unsafe_allow_html=True)
     # CTA Button (updated to use the new color scheme)
 st.markdown("""
     <div style="text-align: center; margin-top: 2rem;">
@@ -300,12 +309,67 @@ st.markdown(f"""
     </table>
     """, unsafe_allow_html=True)
 
+st.markdown(f"""
+    <style>
+    .pricing-table {{
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2rem;
+    }}
+    .pricing-table th, .pricing-table td {{
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }}
+    .pricing-table th {{
+        background-color: #f2f2f2;
+    }}
+    .check {{
+        color: green;
+        font-size: 1.2rem;
+    }}
+    </style>
+    <table class="pricing-table">
+        <tr>
+            <th>Feature</th>
+            <th>Monthly Plan</th>
+            <th>Annual Plan</th>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>$15/month</td>
+            <td>$150/year ($12.50/month)</td>
+        </tr>
+        <tr>
+            <td>Unlimited Grading</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+            <td>24/7 Support</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+            <td>Priority Processing</td>
+            <td></td>
+            <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><a href="{monthly_sub_url}" class="subscribe-button">Subscribe Monthly</a></td>
+            <td><a href="{annual_sub_url}" class="subscribe-button">Subscribe Annually</a></td>
+        </tr>
+    </table>
+    """, unsafe_allow_html=True)
+
 st.markdown('<p style="text-align: center; margin-top: 1rem; font-weight: bold;">Cancel Anytime</p>', unsafe_allow_html=True)
 
 # Footer
 st.markdown('<div class="footer">© 2024 GradeSage AI. All rights reserved.</div>', unsafe_allow_html=True)
 
 # File upload and processing (only visible when logged in)
+if 'email' in st.session_state and st.session_state.email and 'user_subscribed' in st.session_state and st.session_state.user_subscribed:
 if 'email' in st.session_state and st.session_state.email and 'user_subscribed' in st.session_state and st.session_state.user_subscribed:
     st.markdown('<h2 class="section-title">Grade Assignments</h2>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
