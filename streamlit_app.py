@@ -28,9 +28,6 @@ st.markdown("""
         background-color: #f0f2f6;
         padding: 2rem;
     }
-    .a {
-        background-color: #00008B;
-    }
     .title {
         font-size: 3.5rem !important;
         color: #1E1E1E !important;
@@ -66,49 +63,11 @@ st.markdown("""
         gap: 1rem;
         margin-top: 2rem;
     }
-    /* Unified button styles */
-    .stButton > button,
-    .stTextInput > div > div > input,
-    .stSelectbox > div > div > select,
-    .cta-button,
-    .subscribe-button,
-    div[data-testid="stFormSubmitButton"] > button,
-    .sidebar .streamlit-button {
-        background-color: #00008B !important;  /* Dark Blue */
-        color: white !important;
-        font-weight: bold !important;
-        padding: 0.5rem 1rem !important;
-        border-radius: 5px !important;
-        border: none !important;
-        transition: background-color 0.3s ease !important;
-        text-decoration: none;
-    }
-    /* Unified hover styles */
-    .stButton > button:hover,
-    .stTextInput > div > div > input:hover,
-    .stSelectbox > div > div > select:hover,
-    .cta-button:hover,
-    .subscribe-button:hover,
-    div[data-testid="stFormSubmitButton"] > button:hover,
-    .sidebar .streamlit-button:hover {
-        background-color: #0000CD !important;  /* Medium Blue */
-    }
+
     .footer {
         text-align: center;
         margin-top: 3rem;
         color: #4F4F4F;
-    }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a {
-        background-color: #00008B !important;
-    }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover {
-        background-color: #0000CD !important;
-    }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a {
-        background-color: #00008B !important;
-    }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover {
-        background-color: #0000CD !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -122,45 +81,6 @@ def load_lottieurl(url: str):
 
 # Load Lottie animation
 lottie_book = load_lottieurl('https://assets5.lottiefiles.com/packages/lf20_1a8dx7zj.json')
-
-# Custom CSS with more specific selectors and !important flags
-st.markdown("""
-    <style>
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a,
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a div {
-        background-color: #00008B !important;
-        color: white !important;
-        font-weight: bold !important;
-        padding: 0.5rem 1rem !important;
-        border-radius: 5px !important;
-        border: none !important;
-        text-align: center !important;
-        text-decoration: none !important;
-        display: inline-block !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        transition: background-color 0.3s ease !important;
-    }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover,
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover div {
-        background-color: #0000CD !important;
-    }
-    .sidebar-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    .sidebar-header img {
-        width: 40px;
-        height: 40px;
-        margin-right: 10px;
-    }
-    .sidebar-header h1 {
-        margin: 0;
-        font-size: 1.5rem;
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
 # In your sidebar
 with st.sidebar:
