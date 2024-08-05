@@ -7,7 +7,7 @@ import re
 import time
 import json
 import requests 
-from st_paywall import add_auth
+from st_paywall.main import add_auth
 from streamlit_lottie import st_lottie
 from PIL import Image
 
