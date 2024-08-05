@@ -7,9 +7,11 @@ import re
 import time
 import json
 import requests 
-from st_paywall.main import add_auth
+from st_paywall import add_auth
 from streamlit_lottie import st_lottie
 from PIL import Image
+import streamlit.components.v1 as components
+
 
 # Grade Sage Logo
 logo = Image.open("GradeSageLogo.png")  # Adjust the path if necessary
@@ -24,16 +26,21 @@ st.set_page_config(page_title="GradeSage AI", page_icon="🎓", layout="wide")
 # Custom CSS with improved styling and consistent dark blue theme
 # Custom CSS with improved styling and consistent dark blue theme
 st.markdown("""
-    <style>
+   <style>
     .main {
         background-color: #f0f2f6;
         padding: 2rem;
     }
-    .a {
-        background-color: #00008B;
+    .hero {
+        text-align: center;
+        padding: 3rem 0;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
     }
     .title {
-        font-size: 3.5rem !important;
+        font-size: 4rem !important;
         color: #1E1E1E !important;
         font-weight: bold;
         margin-bottom: 1rem;
@@ -56,10 +63,15 @@ st.markdown("""
         padding: 1.5rem;
         margin-bottom: 1rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    .feature-box:hover {
+        transform: translateY(-5px);
     }
     .feature-icon {
         font-size: 2rem;
         margin-right: 1rem;
+        color: #00008B;
     }
     .button-container {
         display: flex;
@@ -67,7 +79,18 @@ st.markdown("""
         gap: 1rem;
         margin-top: 2rem;
     }
-
+    .cta-button {
+        background-color: #00008B !important;
+        color: white !important;
+        padding: 0.75rem 1.5rem !important;
+        font-size: 1.2rem !important;
+        border-radius: 5px !important;
+        text-decoration: none !important;
+        transition: background-color 0.3s ease !important;
+    }
+    .cta-button:hover {
+        background-color: #0000CD !important;
+    }
     .footer {
         text-align: center;
         margin-top: 3rem;
@@ -79,37 +102,40 @@ st.markdown("""
     .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover {
         background-color: #0000CD !important;
     }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a {
-        background-color: #00008B !important;
+    .content-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 2rem;
     }
-    .sidebar .element-container div[data-testid="stMarkdownContainer"] p a:hover {
-        background-color: #0000CD !important;
+    .features-column {
+        flex: 3;
+        margin-right: 2rem;
     }
-    </style>
+    .lottie-column {
+        flex: 2;
+    }
+</style>
     """, unsafe_allow_html=True)
 
 # Function to load Lottie animation
 def load_lottieurl(url: str):
-    r = requests.get(url)
-    if r.status_code != 200:
+    try:
+        r = requests.get(url)
+        r.raise_for_status()  # Will raise an HTTPError if the HTTP request returned an unsuccessful status code
+        return r.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error loading Lottie animation from {url}: {str(e)}")
         return None
-    return r.json()
 
 # Load Lottie animation
 lottie_book = load_lottieurl('https://assets5.lottiefiles.com/packages/lf20_1a8dx7zj.json')
 
-# In your sidebar
+# Sidebar
 with st.sidebar:
-    st.sidebar.image(logo, width=150, caption="Secure Grading. Superior Insights.")  # Adjust the width as needed
-
-
-    st.markdown("""
-        <div class="sidebar-header">
-            <h1>GradeSage AI</h1>
-        </div>
-    """, unsafe_allow_html=True)
+    st.image(logo, width=150, caption="Secure Grading. Superior Insights.")
+    st.markdown("<h1>GradeSage AI</h1>", unsafe_allow_html=True)
     
-    # Use add_auth for optional authentication
     add_auth(
         required=False,
         login_button_text="Login with Google",
@@ -117,51 +143,152 @@ with st.sidebar:
         login_sidebar=True
     )
     
-    # Check if user is logged in
     if 'email' in st.session_state and st.session_state.email:
         st.success(f"Logged in as {st.session_state.email}")
-        
-        # Check if user is subscribed
         if 'user_subscribed' in st.session_state and st.session_state.user_subscribed:
             st.success("Subscribed user")
         else:
             st.warning("Not subscribed")
     else:
         st.info("Please log in to access all features")
-# Header
-st.markdown('<h1 class="title">GradeSage AI</h1>', unsafe_allow_html=True)
 
+#TODO: Make this button change depending on if they are logged in or not.Logged in it should navigate them to a section of the website. if not, it should go to the login.
+# Main content
+# Replace the existing "Start Now" button code with this:
+if 'email' in st.session_state and st.session_state.email:
+    start_now_url = "#grading-section"  # Replace with the actual section URL
+    button_text = "Start Grading"
+else:
+    start_now_url = "https://buy.stripe.com/fZe6pLcAiaMx5YAbIJ"
+    button_text = "Start Now"
 
+st.markdown(f"""
+<div class="hero">
+    <h1 class="title">GradeSage AI</h1>
+    <p class="subtitle">Smart grading for all platforms. Desire2Learn and beyond.</p>
+    <a href="{start_now_url}" class="cta-button">{button_text}</a>
+</div>
+""", unsafe_allow_html=True)
 
-# Main content area
-col1, col2 = st.columns([3, 2])
+# Features section
+st.markdown("<h2 class='section-title'>Features</h2>", unsafe_allow_html=True)
+col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown('<p class="subtitle">Smart grading for all platforms. </p><br><p class="subtitle">Desire2Learn and beyond.</p>', unsafe_allow_html=True)
-    st.markdown('<h2 class="section-title">Features</h2>', unsafe_allow_html=True)
-    
     st.markdown("""
-    <div class="feature-box">
-        <span class="feature-icon">📝</span> Grade short answers/essays in minutes
-    </div>
-    <div class="feature-box">
-        <span class="feature-icon">🌐</span> Compatible with any Learning Management System
-    </div>
-    <div class="feature-box">
-        <span class="feature-icon">🤖</span> Powered by advanced AI technology
+    <div class="features-grid">
+        <div class="feature-box">
+            <span class="feature-icon">📝</span> Grade short answers/essays in minutes
+        </div>
+        <div class="feature-box">
+            <span class="feature-icon">🌐</span> Compatible with any Learning Management System
+        </div>
+        <div class="feature-box">
+            <span class="feature-icon">🤖</span> Powered by advanced AI technology
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
-    st_lottie(lottie_book, height=300, key="book")
+    st_lottie(lottie_book, height=350, key="book")
 
-    # CTA Button (updated to use the new color scheme)
+# TODO: Improve this section with 3 cards and LOTTIE animations to make it interesting. 
+# How it works section
 st.markdown("""
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="#" class="cta-button">Start Now</a>
-    </div>
+    <style>
+    .how-it-works-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .how-it-works-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: calc(50% - 10px);
+    }
+    .how-it-works-card:last-child {
+        width: 100%;
+    }
+    .how-it-works-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    .lottie-container {
+        width: 100%;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .cta-button {
+        background-color: #00008B;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    </style>
     """, unsafe_allow_html=True)
 
+st.markdown("<h2 class='section-title'>How It Works</h2>", unsafe_allow_html=True)
+
+# Load Lottie animations
+upload_animation = load_lottieurl('https://lottie.host/5d43c250-744b-4378-8131-215f23705caf/F55WqcVsga.json')
+analyze_animation = load_lottieurl('https://lottie.host/a2d58474-53d2-448a-9c26-9f01a3ef3868/p4rWDOqsAv.json')
+results_animation = load_lottieurl('https://lottie.host/d19d0192-5312-48c3-b169-5a4143dbcb14/KcdG1iIq2O.json')
+
+# Create a container for the cards
+with st.container():
+    st.markdown('<div class="how-it-works-container">', unsafe_allow_html=True)
+
+    # First two cards
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown('<h3 class="how-it-works-title">1. Upload Assignments</h3>', unsafe_allow_html=True)
+        st_lottie(upload_animation, height=150, key="upload")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<h3 class="how-it-works-title">2. AI Analyzes and Grades</h3>', unsafe_allow_html=True)
+        st_lottie(analyze_animation, height=150, key="analyze")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # Third card (full width)
+    st.markdown('<h3 class="how-it-works-title">3. Review and Download Results</h3>', unsafe_allow_html=True)
+    st_lottie(results_animation, height=250, key="results")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # CTA button
+    if 'email' in st.session_state and st.session_state.email:
+        start_now_url = "#grading-section"  # Replace with the actual section URL
+        button_text = "Start Grading"
+    else:
+        start_now_url = "https://buy.stripe.com/fZe6pLcAiaMx5YAbIJ"
+        button_text = "Start Now"
+
+    st.markdown(f"""
+    <div class="button-container">
+        <a href="{start_now_url}" class="cta-button">{button_text}</a>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Example carousel section
 st.write("---")
@@ -203,165 +330,91 @@ for i, example in enumerate(examples):
         st.write(f"Feedback: {example['feedback']}")
         st.markdown("</div>", unsafe_allow_html=True)
     # CTA Button (updated to use the new color scheme)
+
+#TODO: Make this button change depending on if they are logged in or not.Logged in it should navigate them to a section of the website. if not, it should go to the login.
+# Start Now Button
 st.markdown("""
     <div style="text-align: center; margin-top: 2rem;">
         <a href="#" class="cta-button">Start Now</a>
     </div>
     """, unsafe_allow_html=True)
 
-
-# Example carousel section
-st.write("---")
-st.write("## GradeSage AI in Action")
-
-examples = [
-    {
-        "title": "Example 1: Short Answer Grading",
-        "question": "Explain the concept of supply and demand in economics.",
-        "answer": "Supply and demand are fundamental economic principles that determine the price and quantity of goods in a market. Supply represents the amount of a product producers are willing to sell at various prices, while demand represents the amount consumers are willing to buy. The point where supply and demand intersect determines the market equilibrium price and quantity.",
-        "score": 4,
-        "feedback": "Excellent explanation covering the key aspects of supply and demand. Consider adding an example to illustrate the concept further."
-    },
-    {
-        "title": "Example 2: Essay Evaluation",
-        "question": "Discuss the impact of social media on modern communication.",
-        "answer": "Social media has revolutionized modern communication by providing instant connectivity and global reach. Platforms like Facebook, Twitter, and Instagram have changed how we share information, connect with others, and consume content. While it has improved access to information and facilitated new forms of expression, concerns about privacy, misinformation, and mental health impacts have also arisen.",
-        "score": 3,
-        "feedback": "Good overview of social media's impact. To improve, provide specific examples and discuss both positive and negative effects in more detail."
-    },
-    {
-        "title": "Example 3: Technical Question Assessment",
-        "question": "Describe the process of photosynthesis in plants.",
-        "answer": "Photosynthesis is the process by which plants use sunlight, water, and carbon dioxide to produce oxygen and energy in the form of sugar. It occurs in the chloroplasts, specifically using the green pigment chlorophyll. The process has two stages: light-dependent reactions and light-independent reactions (Calvin cycle).",
-        "score": 4,
-        "feedback": "Very good explanation of photosynthesis. To achieve a perfect score, include more details about the light-dependent and light-independent reactions."
-    }
-]
-
-for i, example in enumerate(examples):
-    with st.expander(f"{example['title']}"):
-        st.markdown(f"<div class='example-card'>", unsafe_allow_html=True)
-        st.markdown(f"<p class='example-title'>Question:</p>", unsafe_allow_html=True)
-        st.write(example['question'])
-        st.markdown(f"<p class='example-title'>Student Answer:</p>", unsafe_allow_html=True)
-        st.write(example['answer'])
-        st.markdown(f"<p class='example-title'>AI Grading:</p>", unsafe_allow_html=True)
-        st.write(f"Score: {example['score']}/5")
-        st.write(f"Feedback: {example['feedback']}")
-        st.markdown("</div>", unsafe_allow_html=True)
-
-# New Pricing Section
+# Pricing Section
 st.write("---")
 st.write("## Pricing")
 
+# Updated CSS for the pricing table and buttons
+st.markdown("""
+<style>
+.pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+}
+.pricing-table th, .pricing-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.pricing-table th {
+    background-color: #f2f2f2;
+}
+.check {
+    color: green;
+    font-size: 1.2rem;
+}
+.subscribe-button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #00008B;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.subscribe-button:hover {
+    background-color: #0000CD;
+}
+</style>
+""", unsafe_allow_html=True)
 
+# Pricing table HTML with button-style links
 st.markdown(f"""
-    <style>
-    .pricing-table {{
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 2rem;
-    }}
-    .pricing-table th, .pricing-table td {{
-        padding: 1rem;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }}
-    .pricing-table th {{
-        background-color: #f2f2f2;
-    }}
-    .check {{
-        color: green;
-        font-size: 1.2rem;
-    }}
-    </style>
-    <table class="pricing-table">
-        <tr>
-            <th>Feature</th>
-            <th>Monthly Plan</th>
-            <th>Annual Plan</th>
-        </tr>
-        <tr>
-            <td>Price</td>
-            <td>$15/month</td>
-            <td>$150/year ($12.50/month)</td>
-        </tr>
-        <tr>
-            <td>Unlimited Grading</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-        </tr>
-        <tr>
-            <td>24/7 Support</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-        </tr>
-        <tr>
-            <td>Priority Processing</td>
-            <td></td>
-            <td><span class="check">✓</span></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><a href="{monthly_sub_url}" class="subscribe-button">Subscribe Monthly</a></td>
-            <td><a href="{annual_sub_url}" class="subscribe-button">Subscribe Annually</a></td>
-        </tr>
-    </table>
-    """, unsafe_allow_html=True)
-
-st.markdown(f"""
-    <style>
-    .pricing-table {{
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 2rem;
-    }}
-    .pricing-table th, .pricing-table td {{
-        padding: 1rem;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }}
-    .pricing-table th {{
-        background-color: #f2f2f2;
-    }}
-    .check {{
-        color: green;
-        font-size: 1.2rem;
-    }}
-    </style>
-    <table class="pricing-table">
-        <tr>
-            <th>Feature</th>
-            <th>Monthly Plan</th>
-            <th>Annual Plan</th>
-        </tr>
-        <tr>
-            <td>Price</td>
-            <td>$15/month</td>
-            <td>$150/year ($12.50/month)</td>
-        </tr>
-        <tr>
-            <td>Unlimited Grading</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-        </tr>
-        <tr>
-            <td>24/7 Support</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-        </tr>
-        <tr>
-            <td>Priority Processing</td>
-            <td></td>
-            <td><span class="check">✓</span></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><a href="{monthly_sub_url}" class="subscribe-button">Subscribe Monthly</a></td>
-            <td><a href="{annual_sub_url}" class="subscribe-button">Subscribe Annually</a></td>
-        </tr>
-    </table>
-    """, unsafe_allow_html=True)
+<table class="pricing-table">
+    <tr>
+        <th>Feature</th>
+        <th>Monthly Plan</th>
+        <th>Annual Plan</th>
+    </tr>
+    <tr>
+        <td>Price</td>
+        <td>$15/month</td>
+        <td>$150/year ($12.50/month)</td>
+    </tr>
+    <tr>
+        <td>Unlimited Grading</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+    </tr>
+    <tr>
+        <td>24/7 Support</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+    </tr>
+    <tr>
+        <td>Priority Processing</td>
+        <td></td>
+        <td><span class="check">✓</span></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><a href="{monthly_sub_url}" class="subscribe-button" style="color:white;">Subscribe Monthly</a></td>
+        <td><a href="{annual_sub_url}" class="subscribe-button" style="color:white;">Subscribe Annually</a></td>
+    </tr>
+</table>
+""", unsafe_allow_html=True)
 
 st.markdown('<p style="text-align: center; margin-top: 1rem; font-weight: bold;">Cancel Anytime</p>', unsafe_allow_html=True)
 
@@ -369,7 +422,6 @@ st.markdown('<p style="text-align: center; margin-top: 1rem; font-weight: bold;"
 st.markdown('<div class="footer">© 2024 GradeSage AI. All rights reserved.</div>', unsafe_allow_html=True)
 
 # File upload and processing (only visible when logged in)
-if 'email' in st.session_state and st.session_state.email and 'user_subscribed' in st.session_state and st.session_state.user_subscribed:
 if 'email' in st.session_state and st.session_state.email and 'user_subscribed' in st.session_state and st.session_state.user_subscribed:
     st.markdown('<h2 class="section-title">Grade Assignments</h2>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
