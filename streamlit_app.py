@@ -24,7 +24,6 @@ annual_sub_url = "https://buy.stripe.com/fZe6pLcAiaMx5YAbIJ"
 st.set_page_config(page_title="GradeSage AI", page_icon="🎓", layout="wide")
 
 # Custom CSS with improved styling and consistent dark blue theme
-# Custom CSS with improved styling and consistent dark blue theme
 st.markdown("""
    <style>
     .main {
