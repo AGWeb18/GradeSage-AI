@@ -10,8 +10,6 @@ import requests
 from st_paywall import add_auth
 from streamlit_lottie import st_lottie
 from PIL import Image
-import streamlit.components.v1 as components
-
 
 # Grade Sage Logo
 logo = Image.open("GradeSageLogo.png")  # Adjust the path if necessary
