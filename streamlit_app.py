@@ -30,22 +30,28 @@ st.markdown("""
     }
     .hero {
         text-align: center;
-        padding: 3rem 0;
+        padding: 3rem;
         background-color: #ffffff;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-bottom: 2rem;
+        
     }
+    .hero:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
     .title {
-        font-size: 4rem !important;
-        color: #1E1E1E !important;
+        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
         font-weight: bold;
-        margin-bottom: 1rem;
+        color: #1E1E1E;
     }
+
     .subtitle {
-        font-size: 1.5rem !important;
-        color: #4F4F4F !important;
-        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: #4F4F4F;
     }
     .section-title {
         font-size: 2rem !important;
@@ -161,9 +167,15 @@ else:
 
 st.markdown(f"""
 <div class="hero">
-    <h1 class="title">Grade Sage AI</h1>
-    <p class="subtitle">Smart grading for all platforms. Desire2Learn and beyond.</p>
-    <a href="{start_now_url}" class="cta-button">{button_text}</a>
+    <h1 class="title">🎓 Grade Sage AI 🤖</h1>
+    <p class="subtitle">Revolutionize Your Grading Process</p>
+    <p class="description">Smart grading for all platforms. From Desire2Learn to Canvas and beyond.</p>
+    <ul class="features">
+        <li>⚡️ Lightning-fast grading</li>
+        <li>🎯 Precise feedback</li>
+        <li>🌐 Multi-platform compatibility</li>
+    </ul>
+    <a href="{start_now_url}" class="cta-button">{button_text} 🚀</a>
 </div>
 """, unsafe_allow_html=True)
 
