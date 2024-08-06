@@ -161,7 +161,7 @@ else:
 
 st.markdown(f"""
 <div class="hero">
-    <h1 class="title">GradeSage AI</h1>
+    <h1 class="title">Grade Sage AI</h1>
     <p class="subtitle">Smart grading for all platforms. Desire2Learn and beyond.</p>
     <a href="{start_now_url}" class="cta-button">{button_text}</a>
 </div>
