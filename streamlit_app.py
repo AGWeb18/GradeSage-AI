@@ -328,14 +328,6 @@ for i, example in enumerate(examples):
         st.markdown("</div>", unsafe_allow_html=True)
     # CTA Button (updated to use the new color scheme)
 
-#TODO: Make this button change depending on if they are logged in or not.Logged in it should navigate them to a section of the website. if not, it should go to the login.
-# Start Now Button
-st.markdown("""
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="#" class="cta-button">Start Now</a>
-    </div>
-    """, unsafe_allow_html=True)
-
 # Pricing Section
 st.write("---")
 st.write("## Pricing")
