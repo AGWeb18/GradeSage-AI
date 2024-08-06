@@ -1,6 +1,11 @@
 [theme]
-primaryColor="#F63366"
-backgroundColor="#FFFFFF"
-secondaryBackgroundColor="#F0F2F6"
-textColor="#262730"
+primaryColor="#00008B"  # Dark blue, matching the button color
+backgroundColor="#FFFFFF"  # Keep white background
+secondaryBackgroundColor="#F0F2F6"  # Keep light gray-blue
+textColor="#262730"  # Keep dark gray for text
+accentColor="#4169E1"  # Royal blue, for highlights and secondary elements
 font="sans serif"
+
+# Additional colors for variety if needed:
+lightAccent="#E6E6FA"  # Lavender, for subtle highlights
+warningColor="#FFA500"  # Orange, for warnings or important information
