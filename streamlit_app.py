@@ -293,25 +293,25 @@ st.write("## GradeSage AI in Action")
 
 examples = [
     {
-        "title": "Example 1: Short Answer Grading",
-        "question": "Explain the concept of supply and demand in economics.",
-        "answer": "Supply and demand are fundamental economic principles that determine the price and quantity of goods in a market. Supply represents the amount of a product producers are willing to sell at various prices, while demand represents the amount consumers are willing to buy. The point where supply and demand intersect determines the market equilibrium price and quantity.",
-        "score": 4,
-        "feedback": "Excellent explanation covering the key aspects of supply and demand. Consider adding an example to illustrate the concept further."
+        "title": "Example 1: Low Score - Historical Analysis",
+        "question": "Analyze the causes of the French Revolution.",
+        "answer": "The French Revolution happened because people were unhappy. There was a king and he was bad. People wanted more freedom.",
+        "score": 1,
+        "feedback": "This answer lacks depth and specific historical details. To improve, include key events, social and economic factors, and the role of Enlightenment ideas. Mention specific figures, dates, and societal conditions that led to the revolution."
     },
     {
-        "title": "Example 2: Essay Evaluation",
-        "question": "Discuss the impact of social media on modern communication.",
-        "answer": "Social media has revolutionized modern communication by providing instant connectivity and global reach. Platforms like Facebook, Twitter, and Instagram have changed how we share information, connect with others, and consume content. While it has improved access to information and facilitated new forms of expression, concerns about privacy, misinformation, and mental health impacts have also arisen.",
+        "title": "Example 2: Medium Score - Scientific Explanation",
+        "question": "Explain the process of natural selection in evolution.",
+        "answer": "Natural selection is a key mechanism of evolution proposed by Charles Darwin. It's the process where organisms with favorable traits are more likely to survive and reproduce, passing these traits to their offspring. This leads to changes in populations over time. Organisms that are better adapted to their environment have a higher chance of survival.",
         "score": 3,
-        "feedback": "Good overview of social media's impact. To improve, provide specific examples and discuss both positive and negative effects in more detail."
+        "feedback": "Good basic explanation of natural selection. To improve, include specific examples of natural selection in action, discuss the role of genetic variation, and explain how this process leads to speciation over time. Consider mentioning concepts like fitness and adaptation in more detail."
     },
     {
-        "title": "Example 3: Technical Question Assessment",
-        "question": "Describe the process of photosynthesis in plants.",
-        "answer": "Photosynthesis is the process by which plants use sunlight, water, and carbon dioxide to produce oxygen and energy in the form of sugar. It occurs in the chloroplasts, specifically using the green pigment chlorophyll. The process has two stages: light-dependent reactions and light-independent reactions (Calvin cycle).",
-        "score": 4,
-        "feedback": "Very good explanation of photosynthesis. To achieve a perfect score, include more details about the light-dependent and light-independent reactions."
+        "title": "Example 3: Perfect Score - Literary Analysis",
+        "question": "Discuss the theme of ambition in Shakespeare's 'Macbeth'.",
+        "answer": "In 'Macbeth', Shakespeare expertly explores the theme of ambition and its corrupting influence. The play portrays ambition as a dangerous force that, when unchecked, can lead to moral decay and ultimately, destruction. Macbeth's ambition, initially sparked by the witches' prophecies, is further fueled by Lady Macbeth's manipulation. This ambition drives him to commit regicide, betraying his king, friend, and moral code. As the play progresses, Macbeth's ambition consumes him, leading to paranoia and more murders to secure his ill-gotten position. Shakespeare juxtaposes Macbeth's destructive ambition with Banquo's more measured approach, highlighting the potential for ambition to be either a virtue or a vice. The tragic conclusion of the play serves as a cautionary tale about the dangers of allowing ambition to override moral considerations and loyalty. Through vivid imagery, soliloquies, and the gradual deterioration of Macbeth's character, Shakespeare masterfully illustrates how unchecked ambition can corrode the soul and lead to one's downfall.",
+        "score": 5,
+        "feedback": "Excellent analysis! Your response demonstrates a deep understanding of the play's central theme. You've effectively discussed how ambition drives the plot, affects character development, and contributes to the tragic elements of the play. Your comparison between Macbeth and Banquo adds depth to the analysis. Well done!"
     }
 ]
 
