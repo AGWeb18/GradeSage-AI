@@ -155,26 +155,32 @@ with st.sidebar:
     else:
         st.info("Please log in to access all features")
 
-#TODO: Make this button change depending on if they are logged in or not.Logged in it should navigate them to a section of the website. if not, it should go to the login.
-# Main content
-# Replace the existing "Start Now" button code with this:
-if 'email' in st.session_state and st.session_state.email:
-    start_now_url = "#grading-section"  # Replace with the actual section URL
-    button_text = "Start Grading"
+#Main Content
+# Determine button behavior based on user status
+if 'email' not in st.session_state or not st.session_state.email:
+    # User is not logged in
+    start_now_url = "https://your-login-url.com"  # Replace with your actual login URL
+    button_text = "Login to Start"
+elif 'user_subscribed' not in st.session_state or not st.session_state.user_subscribed:
+    # User is logged in but hasn't paid
+    start_now_url = monthly_sub_url
+    button_text = "Subscribe to Start"
 else:
-    start_now_url = "https://buy.stripe.com/fZe6pLcAiaMx5YAbIJ"
-    button_text = "Start Now"
+    # User is logged in and has paid
+    start_now_url = "#grading-section"
+    button_text = "Start Grading"
 
+# Use the determined URL and text for the button
 st.markdown(f"""
 <div class="hero">
     <h1 class="title">🎓 Grade Sage AI 🤖</h1>
     <p class="subtitle">Revolutionize Your Grading Process</p>
     <p class="description">Smart grading for all platforms. From Desire2Learn to Canvas and beyond.</p>
-    <ul class="features">
-        <li>⚡️ Lightning-fast grading</li>
-        <li>🎯 Precise feedback</li>
-        <li>🌐 Multi-platform compatibility</li>
-    </ul>
+    <div class="features">
+        <p>⚡️ Lightning-fast grading</p>
+        <p>🎯 Precise feedback</p>
+        <p>🌐 Multi-platform compatibility</p>
+    </div>
     <a href="{start_now_url}" class="cta-button">{button_text} 🚀</a>
 </div>
 """, unsafe_allow_html=True)
